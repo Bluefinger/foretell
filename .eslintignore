@@ -1,0 +1,4 @@
+**/dist/**/*
+coverage/**/*.js
+benchmarks/node_modules/**/*
+test/generated/*.js

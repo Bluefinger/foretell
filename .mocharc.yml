@@ -1,0 +1,10 @@
+check-leaks: true
+diff: true
+color: true
+growl: false
+reporter: dot
+recursive: false
+require:
+  - 'source-map-support/register'
+spec: test/**/*.spec.js
+slow: 500
