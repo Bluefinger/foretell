@@ -130,7 +130,10 @@ Resolves after all promises/values in the input array are resolved. Rejects imme
 Accepts arrays as input, does not accept iterables for the sake of small code size. Use `Array.from` if you need to covert iterables into arrays.
 
 ```js
-const promises = [Foretell.resolve(2), Foretell.resolve("5"), "something"];
+const delay = (ms, value) =>
+  new Foretell(resolve => setTimeout(resolve, ms, value));
+
+const promises = [Foretell.resolve(2), delay(100, "5"), "something"];
 
 Foretell.all(promises).then(values => {
   // passes all resolved values as an array
