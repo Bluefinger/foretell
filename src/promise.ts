@@ -13,14 +13,16 @@ class Foretell<T> implements PromiseLike<T> {
   private _clients?: (() => any)[];
   private _value?: T;
   private _handled?: boolean;
-  public constructor(func?: Function) {
+  public constructor(
+    func?: (resolve: (arg?: T) => void, reject: (reason: any) => void) => void
+  ) {
     const hasFunc = isFunction(func);
     const me = this;
     me._handled = !hasFunc;
     if (func && hasFunc) {
       try {
         func(
-          (arg: T) => me.$$Settle$$(STATE.FULFILLED, arg),
+          (arg?: T) => me.$$Settle$$(STATE.FULFILLED, arg),
           (reason: any) => me.$$Settle$$(STATE.REJECTED, reason)
         );
       } catch (error) {
@@ -93,11 +95,8 @@ class Foretell<T> implements PromiseLike<T> {
       if (me._clients) {
         for (let i = 0; i < me._clients.length; i += 1) defer(me._clients[i]);
       } else if (
-        /* istanbul ignore next */
         state === STATE.REJECTED &&
-        /* istanbul ignore next */
         !Foretell.suppressUncaughtExceptions &&
-        /* istanbul ignore next */
         !me._handled
       ) {
         /* istanbul ignore next */
@@ -186,7 +185,7 @@ class Foretell<T> implements PromiseLike<T> {
   }
   public static race(promises: PromiseLike<any>[]): PromiseLike<any> {
     return new Foretell(
-      (resolve: (arg: any) => any, reject: (reason: any) => any) => {
+      (resolve: (arg?: any) => void, reject: (reason?: any) => void) => {
         if (isArray(promises)) {
           for (let n = 0; n < promises.length; n += 1) {
             const promise = promises[n];
