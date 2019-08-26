@@ -17,7 +17,7 @@
     "bluebird": "3.5.5",
     "lodash": "^4.17.15",
     "microtime": "^3.0.0",
-    "rollup": "^1.17.0",
+    "rollup": "^1.20.2",
     "rollup-plugin-commonjs": "10.0.1",
     "rollup-plugin-node-resolve": "5.2.0",
     "rollup-plugin-serve": "^1.0.1",
