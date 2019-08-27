@@ -26,11 +26,7 @@ const asyncValues = promise => {
   const data = values.slice();
   for (let n = 0; n < data.length; n += 1) {
     const value = data[n];
-    if (value > 50) {
-      data[n] = promise.resolve().then(() => value);
-    } else {
-      data[n] = value;
-    }
+    data[n] = value > 50 ? promise.resolve().then(() => value) : value;
   }
   return data;
 };

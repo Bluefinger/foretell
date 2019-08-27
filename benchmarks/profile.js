@@ -11,7 +11,7 @@ const values = (() => {
   const data = [];
   const total = 256;
   data.length = total;
-  let count = 256;
+  const count = 256;
   for (let n = 0; n < data.length; n += 1) {
     const value = (Math.random() * 100) | 0;
     data[n] = value;
