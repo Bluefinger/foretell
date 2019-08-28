@@ -1,13 +1,14 @@
-import { QUEUE_SIZE, UNDEF } from "./constants";
+import { UNDEF } from "./constants.ts";
+const QUEUE_SIZE = 2048;
 
 let pointer = 0;
-let queue: (() => any)[] = [];
+let queue = [];
 
 const flushQueue = () => {
-  let old: (() => any)[];
+  let old;
   while (queue.length - pointer) {
-    queue[pointer]();
-    queue[pointer++] = undefined as any;
+    queue[pointer].$$Execute$$();
+    queue[pointer++] = undefined;
     if (pointer === QUEUE_SIZE) {
       old = queue;
       queue = old.slice(QUEUE_SIZE);
@@ -42,6 +43,6 @@ const schedule = (() => {
   };
 })();
 
-export const defer = (fn: () => any) => {
-  if (queue.push(fn) - pointer === 1) schedule();
+export const defer = then => {
+  if (queue.push(then) - pointer === 1) schedule();
 };

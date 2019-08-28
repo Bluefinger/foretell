@@ -6,6 +6,7 @@
   "scripts": {
     "browser:serial": "rollup -c -i serial.js",
     "browser:parallel": "rollup -c -i parallel.js",
+    "browser:resolution": "rollup -c -i resolution.js",
     "browser:profile": "rollup -c -i profile.js",
     "node:serial": "node serial.js",
     "node:parallel": "node parallel.js"

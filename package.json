@@ -1,6 +1,6 @@
 {
   "name": "foretell",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A small, fast Promise/A+ implementation written in Typescript",
   "main": "dist/umd/foretell.min.js",
   "module": "dist/esm/foretell.min.js",
@@ -41,13 +41,13 @@
     "prettier": "^1.18.2",
     "promises-aplus-tests": "^2.1.2",
     "rimraf": "^2.7.1",
-    "rollup": "^1.20.2",
+    "rollup": "^1.20.3",
     "rollup-plugin-istanbul": "^2.0.1",
     "rollup-plugin-terser": "^5.1.1",
     "rollup-plugin-typescript2": "^0.23.0",
     "source-map-support": "0.5.13",
     "tslib": "^1.10.0",
-    "typescript": "^3.5.3"
+    "typescript": "^3.6.2"
   },
   "nyc": {
     "extension": [
@@ -59,7 +59,8 @@
       "**/dist/**",
       "**/test/**",
       "**/*.d.ts",
-      "**/src/defer.ts"
+      "**/src/defer.js",
+      "**/src/constants.ts"
     ]
   }
 }

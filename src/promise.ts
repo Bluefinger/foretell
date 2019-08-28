@@ -10,9 +10,12 @@ const arrayError = (value: any) =>
 
 class Foretell<T> implements PromiseLike<T> {
   private _state: STATE = STATE.PENDING;
-  private _clients?: (() => any)[];
+  private _clients?: Foretell<any>[];
   private _value?: T;
   private _handled?: boolean;
+  private _parent?: Foretell<any>;
+  private _onFulfill: Function = IDENTITY;
+  private _onReject: Function = THROW_IDENTITY;
   public constructor(
     func?: (resolve: (arg?: T) => void, reject: (reason: any) => void) => void
   ) {
@@ -45,32 +48,24 @@ class Foretell<T> implements PromiseLike<T> {
     const me = this;
     const then = new Foretell<TResult | TReject>();
 
-    const onFulfilled = isFunction(onfulfilled) ? onfulfilled : IDENTITY;
-    const onRejected = isFunction(onrejected) ? onrejected : THROW_IDENTITY;
+    then._parent = me;
+    if (isFunction(onfulfilled)) {
+      then._onFulfill = onfulfilled;
+    }
+    if (isFunction(onrejected)) {
+      then._onReject = onrejected;
+    }
 
     me._handled = true;
 
-    const scheduleThen = () => {
-      try {
-        const value = me._value;
-        const nextValue =
-          me._state === STATE.FULFILLED
-            ? onFulfilled(value as T)
-            : onRejected(value);
-        then.$$Resolve$$(nextValue);
-      } catch (error) {
-        then.$$Settle$$(STATE.REJECTED, error);
-      }
-    };
-
     if (!me._state) {
       if (!me._clients) {
-        me._clients = [scheduleThen];
+        me._clients = [then];
       } else {
-        me._clients.push(scheduleThen);
+        me._clients.push(then);
       }
     } else {
-      defer(scheduleThen);
+      defer(then);
     }
 
     return then;
@@ -86,14 +81,27 @@ class Foretell<T> implements PromiseLike<T> {
   public finally(onfinally?: (() => any) | undefined | null): PromiseLike<T> {
     return this.then(onfinally, onfinally);
   }
+  protected $$Execute$$() {
+    const then = this;
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const parent = then._parent!;
+      const nextValue =
+        parent._state === STATE.FULFILLED ? then._onFulfill : then._onReject;
+      then.$$Resolve$$(nextValue.call(undefined, parent._value));
+    } catch (error) {
+      then.$$Settle$$(STATE.REJECTED, error);
+    }
+  }
   protected $$Settle$$(state: STATE.FULFILLED | STATE.REJECTED, value: any) {
     const me = this;
     if (!me._state) {
       me._state = state;
       me._value = value;
+      const clients = me._clients;
       /* istanbul ignore else */
-      if (me._clients) {
-        for (let i = 0; i < me._clients.length; i += 1) defer(me._clients[i]);
+      if (clients) {
+        for (let i = 0; i < clients.length; i += 1) defer(clients[i]);
       } else if (
         state === STATE.REJECTED &&
         !Foretell.suppressUncaughtExceptions &&

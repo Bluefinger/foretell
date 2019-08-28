@@ -28,7 +28,7 @@ const accumulateDataAsync = p => (promise, value) => {
 };
 
 const work = [];
-work.length = 10000;
+work.length = 1000;
 work.fill(0);
 
 setTimeout(() => {
