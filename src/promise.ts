@@ -9,29 +9,30 @@ const arrayError = (value: any) =>
   new TypeError(`Can't convert ${value} to an array`);
 
 class Foretell<T> implements PromiseLike<T> {
-  private _state: STATE = STATE.PENDING;
+  private _state?: STATE;
   private _clients?: Foretell<any>[];
   private _value?: T;
   private _handled?: boolean;
   private _parent?: Foretell<any>;
-  private _onFulfill: Function = IDENTITY;
-  private _onReject: Function = THROW_IDENTITY;
+  private _onFulfill?: Function;
+  private _onReject?: Function;
   public constructor(
     func?: (resolve: (arg?: T) => void, reject: (reason: any) => void) => void
   ) {
     const hasFunc = isFunction(func);
     const me = this;
     me._handled = !hasFunc;
-    if (func && hasFunc) {
+    if (hasFunc) {
       try {
-        func(
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        func!(
           (arg?: T) => me.$$Settle$$(STATE.FULFILLED, arg),
           (reason: any) => me.$$Settle$$(STATE.REJECTED, reason)
         );
       } catch (error) {
         me.$$Settle$$(STATE.REJECTED, error);
       }
-    } else if (arguments.length && !hasFunc) {
+    } else if (arguments.length) {
       throw new TypeError(`${func} is not a function`);
     }
   }
@@ -49,12 +50,8 @@ class Foretell<T> implements PromiseLike<T> {
     const then = new Foretell<TResult | TReject>();
 
     then._parent = me;
-    if (isFunction(onfulfilled)) {
-      then._onFulfill = onfulfilled;
-    }
-    if (isFunction(onrejected)) {
-      then._onReject = onrejected;
-    }
+    then._onFulfill = isFunction(onfulfilled) ? onfulfilled : IDENTITY;
+    then._onReject = isFunction(onrejected) ? onrejected : THROW_IDENTITY;
 
     me._handled = true;
 
@@ -88,7 +85,8 @@ class Foretell<T> implements PromiseLike<T> {
       const parent = then._parent!;
       const nextValue =
         parent._state === STATE.FULFILLED ? then._onFulfill : then._onReject;
-      then.$$Resolve$$(nextValue.call(undefined, parent._value));
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      then.$$Resolve$$(nextValue!.call(undefined, parent._value));
     } catch (error) {
       then.$$Settle$$(STATE.REJECTED, error);
     }

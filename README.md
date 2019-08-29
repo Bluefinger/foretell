@@ -127,7 +127,7 @@ promise.catch(value => console.log(`value ${value} is immediately rejected`));
 
 Resolves after all promises/values in the input array are resolved. Rejects immediately on the first promise to be rejected.
 
-Accepts arrays as input, does not accept iterables for the sake of small code size. Use `Array.from` if you need to covert iterables into arrays.
+Accepts arrays as input, does not accept iterables for the sake of small code size. Use `Array.from` if you need to convert iterables into arrays.
 
 ```js
 const delay = (ms, value) =>
@@ -144,7 +144,7 @@ Foretell.all(promises).then(values => {
 
 Resolves on the first promise/value to resolve in the input array. Also rejects immediately on the first promise to be rejected.
 
-Accepts arrays as input, does not accept iterables for the sake of small code size. Use `Array.from` if you need to covert iterables into arrays.
+Accepts arrays as input, does not accept iterables for the sake of small code size. Use `Array.from` if you need to convert iterables into arrays.
 
 ```js
 const delay = (ms, value) =>
@@ -165,28 +165,28 @@ Tested against Native Promises, Zousan, and Bluebird, with the test machine bein
 
 | Library  | Create & Resolve (ops/sec) | Serial (ops/sec) | Parallel (ops/sec) |
 | -------- | -------------------------- | ---------------- | ------------------ |
-| Native   | 2,689,659 ±0.59%           | 20,085 ±0.39%    | 66,448 ±0.40%      |
-| Foretell | 2,863,081 ±0.30%           | 14,417 ±0.20%    | 80,481 ±0.35%      |
-| Zousan   | 2,626,906 ±0.35%           | 9,925 ±0.41%     | 34,841 ±0.46%      |
-| Bluebird | 386,197 ±0.29%             | 8,615 ±0.51%     | 65,907 ±0.51%      |
+| Native   | 2,719,777 ±0.43%           | 20,109 ±0.44%    | 67,935 ±0.35%      |
+| Foretell | 2,908,245 ±0.35%           | 14,314 ±0.20%    | 85,626 ±0.39%      |
+| Zousan   | 2,611,881 ±0.34%           | 9,609 ±0.29%     | 32,167 ±0.38%      |
+| Bluebird | 397,900 ±0.31%             | 7,914 ±0.72%     | 69,059 ±0.71%      |
 
 ### Chrome 76.0.3809.132
 
 | Library  | Create & Resolve (ops/sec) | Serial (ops/sec) | Parallel (ops/sec) |
 | -------- | -------------------------- | ---------------- | ------------------ |
-| Native   | 208,831 ±1.16%             | 20,915 ±0.30%    | 67,129 ±0.37%      |
-| Foretell | 101,461 ±0.82%             | 14,389 ±0.29%    | 95,577 ±0.42%      |
-| Zousan   | 104,357 ±0.88%             | 9,525 ±0.45%     | 41,303 ±0.38%      |
-| Bluebird | 4,936 ±1.13%               | 87.12 ±6.43%     | 371 ±2.87%         |
+| Native   | 211,398 ±0.98%             | 20,606 ±0.24%    | 67,515 ±0.38%      |
+| Foretell | 103,626 ±0.92%             | 14,002 ±0.26%    | 91,163 ±0.25%      |
+| Zousan   | 104,634 ±1.05%             | 9,590 ±0.44%     | 39,941 ±0.33%      |
+| Bluebird | 5,242 ±0.56%               | 102 ±0.45%       | 444 ±1.30%         |
 
 ### Firefox v68.0.2
 
 | Library  | Create & Resolve (ops/sec) | Serial (ops/sec) | Parallel (ops/sec) |
 | -------- | -------------------------- | ---------------- | ------------------ |
-| Native   | 161,798 ±2.93%             | 573 ±0.88%       | 2,581 ±3.07%       |
-| Foretell | 218,908 ±0.61%             | 4,336 ±2.38%     | 24,027 ±1.94%      |
-| Zousan   | 192,285 ±0.57%             | 1,873 ±1.70%     | 6,651 ±1.88%       |
-| Bluebird | 19,800 ±3.76%              | 109 ±1.98%       | 395 ±1.60%         |
+| Native   | 164,723 ±1.59%             | 567 ±2.32%       | 3,036 ±1.85%       |
+| Foretell | 216,060 ±0.46%             | 4,383 ±2.10%     | 24,936 ±1.64%      |
+| Zousan   | 186,790 ±0.50%             | 1,913 ±2.17%     | 6,807 ±1.90%       |
+| Bluebird | 19,817 ±1.69%              | 110 ±1.64%       | 399 ±1.92%         |
 
 ## Licensing
 
