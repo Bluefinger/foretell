@@ -8,13 +8,16 @@ const suite1 = new Benchmark.Suite();
 
 log("Create & Resolve Async\n");
 
+const dummyThenFn = () => "value";
+const resolver = resolve => defer(resolve);
+
 suite1
   .add("Native Promise", {
     async: true,
     defer: true,
     fn: deferred => {
-      const promise = new Promise(resolve => defer(resolve));
-      promise.then(() => "value");
+      const promise = new Promise(resolver);
+      promise.then(dummyThenFn);
       promise.then(() => deferred.resolve());
     }
   })
@@ -22,8 +25,8 @@ suite1
     async: true,
     defer: true,
     fn: deferred => {
-      const promise = new Foretell(resolve => defer(resolve));
-      promise.then(() => "value");
+      const promise = new Foretell(resolver);
+      promise.then(dummyThenFn);
       promise.then(() => deferred.resolve());
     }
   })
@@ -31,8 +34,8 @@ suite1
     async: true,
     defer: true,
     fn: deferred => {
-      const promise = new Zousan(resolve => defer(resolve));
-      promise.then(() => "value");
+      const promise = new Zousan(resolver);
+      promise.then(dummyThenFn);
       promise.then(() => deferred.resolve());
     }
   })
@@ -40,8 +43,8 @@ suite1
     async: true,
     defer: true,
     fn: deferred => {
-      const promise = new Bluebird(resolve => defer(resolve));
-      promise.then(() => "value");
+      const promise = new Bluebird(resolver);
+      promise.then(dummyThenFn);
       promise.then(() => deferred.resolve());
     }
   })

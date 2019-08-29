@@ -23,13 +23,12 @@ const values = (() => {
 })();
 
 const accumulateDataAsync = p => (promise, value) => {
+  if (value > 50) {
+    promise.then(() => 50 - value);
+    promise.then(acc => "hot " + acc);
+  }
   return promise.then(acc => {
-    const then = p.resolve();
-    if (value > 50) {
-      then.then(() => 50 - value);
-      then.then(() => "hot " + acc);
-    }
-    return then.then(() => acc + value);
+    return p.resolve(acc + value);
   });
 };
 

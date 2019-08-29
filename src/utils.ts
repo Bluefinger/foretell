@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import { UNDEF } from "./constants";
 
 export const logError =

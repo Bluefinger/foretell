@@ -44,7 +44,7 @@
     "rollup": "^1.20.3",
     "rollup-plugin-istanbul": "^2.0.1",
     "rollup-plugin-terser": "^5.1.1",
-    "rollup-plugin-typescript2": "^0.23.0",
+    "rollup-plugin-typescript2": "^0.24.0",
     "source-map-support": "0.5.13",
     "tslib": "^1.10.0",
     "typescript": "^3.6.2"
@@ -60,7 +60,8 @@
       "**/test/**",
       "**/*.d.ts",
       "**/src/defer.js",
-      "**/src/constants.ts"
+      "**/src/constants.ts",
+      "**/src/utils.ts"
     ]
   }
 }
