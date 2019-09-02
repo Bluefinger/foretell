@@ -18,7 +18,12 @@ const flushQueue = () => {
 };
 
 const schedule = (() => {
-  // Micro-task scheduling for browsers
+  // Modern Micro-task scheduling for browsers
+  if (typeof queueMicrotask !== UNDEF) {
+    return () => queueMicrotask(flushQueue);
+  }
+
+  // Fallback Micro-task scheduling for browsers
   if (typeof MutationObserver !== UNDEF) {
     const div = document.createElement("div");
     const observer = new MutationObserver(flushQueue);

@@ -1,6 +1,6 @@
 {
   "name": "foretell",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A small, fast Promise/A+ implementation written in Typescript",
   "main": "dist/umd/foretell.min.js",
   "module": "dist/esm/foretell.min.js",
@@ -29,10 +29,10 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^2.0.0",
-    "@typescript-eslint/parser": "^2.0.0",
-    "@typescript-eslint/typescript-estree": "^2.0.0",
-    "eslint": "^6.2.2",
+    "@typescript-eslint/eslint-plugin": "^2.1.0",
+    "@typescript-eslint/parser": "^2.1.0",
+    "@typescript-eslint/typescript-estree": "^2.1.0",
+    "eslint": "^6.3.0",
     "eslint-config-prettier": "^6.1.0",
     "eslint-plugin-prettier": "^3.1.0",
     "mocha": "^6.2.0",

@@ -1,3 +1,3 @@
 import Foretell from "promise";
 
-declare function defer(promise: Foretell<any>): void;
+export declare function defer(promise: Foretell<any>): void;
