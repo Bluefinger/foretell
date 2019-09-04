@@ -179,7 +179,7 @@ Tested against Native Promises, Zousan, and Bluebird, with the test machine bein
 | Zousan   | 102,868 ±0.92%             | 9,896 ±0.67%     | 39,323 ±0.45%      |
 | Bluebird | 5,255 ±0.71%               | 107 ±0.38%       | 476 ±0.86%         |
 
-### Firefox v68.0.2
+### Firefox v68.0.2 (no queueMicrotask)
 
 | Library  | Create & Resolve (ops/sec) | Serial (ops/sec) | Parallel (ops/sec) |
 | -------- | -------------------------- | ---------------- | ------------------ |
@@ -187,6 +187,15 @@ Tested against Native Promises, Zousan, and Bluebird, with the test machine bein
 | Foretell | 216,060 ±0.46%             | 4,383 ±2.10%     | 24,936 ±1.64%      |
 | Zousan   | 186,790 ±0.50%             | 1,913 ±2.17%     | 6,807 ±1.90%       |
 | Bluebird | 19,817 ±1.69%              | 110 ±1.64%       | 399 ±1.92%         |
+
+### Firefox v69.0 (with queueMicrotask)
+
+| Library  | Create & Resolve (ops/sec) | Serial (ops/sec) | Parallel (ops/sec) |
+| -------- | -------------------------- | ---------------- | ------------------ |
+| Native   | 171,133 ±1.73%             | 625 ±1.26%       | 3,174 ±1.85%       |
+| Foretell | 278,067 ±1.51%             | 4,718 ±1.11%     | 24,688 ±2.31%      |
+| Zousan   | 204,458 ±0.44%             | 2,519 ±1.53%     | 9,326 ±1.40%       |
+| Bluebird | 21,093 ±1.96%              | 116 ±2.19%       | 429 ±1.71%         |
 
 ## Licensing
 
