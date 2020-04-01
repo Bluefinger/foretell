@@ -18,6 +18,9 @@ const flushQueue = () => {
 };
 
 const schedule = (() => {
+  if (typeof queueMicrotask !== UNDEF) {
+    return () => queueMicrotask(flushQueue);
+  }
   // Micro-task scheduling for browsers
   if (typeof MutationObserver !== UNDEF) {
     const div = document.createElement("div");
@@ -44,7 +47,7 @@ const schedule = (() => {
 })();
 
 module.exports = {
-  log: function(msg) {
+  log: function (msg) {
     if (typeof document !== "undefined") {
       const div = document.createElement("div");
       div.innerText = msg;
@@ -52,7 +55,7 @@ module.exports = {
     }
     console.log(msg);
   },
-  defer: function(fn) {
+  defer: function (fn) {
     if (queue.push(fn) - pointer === 1) schedule();
-  }
+  },
 };

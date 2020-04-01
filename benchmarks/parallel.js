@@ -22,7 +22,7 @@ const values = (() => {
   return data;
 })();
 
-const asyncValues = promise => {
+const asyncValues = (promise) => {
   const data = values.slice();
   for (let n = 0; n < data.length; n += 1) {
     const value = data[n];
@@ -35,31 +35,31 @@ suite2
   .add("Native Promise Parallel", {
     async: true,
     defer: true,
-    fn: deferred => {
-      Promise.all(asyncValues(Promise)).then(val => deferred.resolve(val));
-    }
+    fn: (deferred) => {
+      Promise.all(asyncValues(Promise)).then((val) => deferred.resolve(val));
+    },
   })
   .add("Foretell Parallel", {
     async: true,
     defer: true,
-    fn: deferred => {
-      Foretell.all(asyncValues(Foretell)).then(val => deferred.resolve(val));
-    }
+    fn: (deferred) => {
+      Foretell.all(asyncValues(Foretell)).then((val) => deferred.resolve(val));
+    },
   })
   .add("Zousan Parallel", {
     async: true,
     defer: true,
-    fn: deferred => {
-      Zousan.all(asyncValues(Zousan)).then(val => deferred.resolve(val));
-    }
+    fn: (deferred) => {
+      Zousan.all(asyncValues(Zousan)).then((val) => deferred.resolve(val));
+    },
   })
   .add("Bluebird Parallel", {
     async: true,
     defer: true,
-    fn: deferred => {
-      Bluebird.all(asyncValues(Bluebird)).then(val => deferred.resolve(val));
-    }
+    fn: (deferred) => {
+      Bluebird.all(asyncValues(Bluebird)).then((val) => deferred.resolve(val));
+    },
   })
-  .on("cycle", ev => log(ev.target.toString()))
+  .on("cycle", (ev) => log(ev.target.toString()))
   .on("complete", () => log("Benchmark over!"))
   .run();

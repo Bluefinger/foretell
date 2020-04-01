@@ -16,8 +16,8 @@ const values = (() => {
   return data;
 })();
 
-const accumulateDataAsync = p => (promise, value) =>
-  promise.then(acc => p.resolve(acc + value));
+const accumulateDataAsync = (p) => (promise, value) =>
+  promise.then((acc) => p.resolve(acc + value));
 
 const work = [];
 work.length = 2000;

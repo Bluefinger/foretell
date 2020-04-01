@@ -1,12 +1,37 @@
-import { STATE, IDENTITY, THROW_IDENTITY } from "./constants";
+import {
+  ARRAY_ERROR,
+  STATE,
+  IDENTITY,
+  THROW_IDENTITY,
+  QUEUE_SIZE,
+} from "./constants";
 import { isFunction, isObject } from "./validate";
-import { defer } from "./defer";
+import { scheduler } from "./scheduler";
 import { extractErrorMsg, logError } from "./utils";
 
 const { isArray } = Array;
 
-const arrayError = (value: any) =>
-  new TypeError(`Can't convert ${value} to an array`);
+let pointer = 0;
+let queue: any[] = [];
+
+const flushQueue = () => {
+  let old;
+  while (queue.length - pointer) {
+    queue[pointer].$$Execute$$();
+    queue[pointer++] = undefined;
+    if (pointer === QUEUE_SIZE) {
+      old = queue;
+      queue = old.slice(QUEUE_SIZE);
+      old.length = pointer = 0;
+    }
+  }
+};
+
+const schedule = scheduler(flushQueue);
+
+const defer = (then: Foretell<any>) => {
+  if (queue.push(then) - pointer === 1) schedule();
+};
 
 class Foretell<T> implements PromiseLike<T> {
   private _state?: STATE;
@@ -125,12 +150,12 @@ class Foretell<T> implements PromiseLike<T> {
         if (isFunction(then)) {
           then.call(
             value,
-            arg => {
+            (arg) => {
               if (!calledOrThrown++) {
                 me.$$Resolve$$(arg);
               }
             },
-            reason => {
+            (reason) => {
               if (!calledOrThrown++) {
                 me.$$Settle$$(STATE.REJECTED, reason);
               }
@@ -185,7 +210,7 @@ class Foretell<T> implements PromiseLike<T> {
         }
       }
     } else {
-      reject(arrayError(promises));
+      reject(ARRAY_ERROR(promises));
     }
     return all;
   }
@@ -202,7 +227,7 @@ class Foretell<T> implements PromiseLike<T> {
             }
           }
         } else {
-          reject(arrayError(promises));
+          reject(ARRAY_ERROR(promises));
         }
       }
     );

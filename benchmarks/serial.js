@@ -22,12 +22,12 @@ const values = (() => {
   return data;
 })();
 
-const accumulateDataAsync = p => (promise, value) => {
+const accumulateDataAsync = (p) => (promise, value) => {
   if (value > 50) {
     promise.then(() => 50 - value);
-    promise.then(acc => "hot " + acc);
+    promise.then((acc) => "hot " + acc);
   }
-  return promise.then(acc => {
+  return promise.then((acc) => {
     return p.resolve(acc + value);
   });
 };
@@ -36,39 +36,39 @@ suite1
   .add("Native Promise", {
     async: true,
     defer: true,
-    fn: deferred => {
+    fn: (deferred) => {
       values
         .reduce(accumulateDataAsync(Promise), Promise.resolve(0))
-        .then(val => deferred.resolve(val));
-    }
+        .then((val) => deferred.resolve(val));
+    },
   })
   .add("Foretell", {
     async: true,
     defer: true,
-    fn: deferred => {
+    fn: (deferred) => {
       values
         .reduce(accumulateDataAsync(Foretell), Foretell.resolve(0))
-        .then(val => deferred.resolve(val));
-    }
+        .then((val) => deferred.resolve(val));
+    },
   })
   .add("Zousan", {
     async: true,
     defer: true,
-    fn: deferred => {
+    fn: (deferred) => {
       values
         .reduce(accumulateDataAsync(Zousan), Zousan.resolve(0))
-        .then(val => deferred.resolve(val));
-    }
+        .then((val) => deferred.resolve(val));
+    },
   })
   .add("Bluebird", {
     async: true,
     defer: true,
-    fn: deferred => {
+    fn: (deferred) => {
       values
         .reduce(accumulateDataAsync(Bluebird), Bluebird.resolve(0))
-        .then(val => deferred.resolve(val));
-    }
+        .then((val) => deferred.resolve(val));
+    },
   })
-  .on("cycle", ev => log(ev.target.toString()))
+  .on("cycle", (ev) => log(ev.target.toString()))
   .on("complete", () => log("Benchmark over!"))
   .run();

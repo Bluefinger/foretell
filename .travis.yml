@@ -6,7 +6,7 @@ cache:
     - .cache
 
 install:
- - npm i --ignore-scripts
+ - npm ci --ignore-scripts
 
 script:
   - npm test

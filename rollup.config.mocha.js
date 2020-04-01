@@ -8,15 +8,15 @@ export default {
       cacheRoot: "./.cache",
       tsconfig: "./tsconfig.json",
       tsconfigOverride: {
-        removeComments: false
-      }
+        removeComments: false,
+      },
     }),
-    istanbul()
+    istanbul(),
   ],
   output: {
     file: "./test/generated/foretell.js",
     format: "umd",
     name: "Foretell",
-    sourcemap: true
-  }
+    sourcemap: true,
+  },
 };
