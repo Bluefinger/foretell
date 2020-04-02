@@ -70,7 +70,7 @@ class Foretell<T> implements PromiseLike<T> {
       | ((reason: any) => TReject | PromiseLike<TReject>)
       | undefined
       | null
-  ): PromiseLike<TResult | TReject> {
+  ): Foretell<TResult | TReject> {
     const me = this;
     const then = new Foretell<TResult | TReject>();
 
@@ -97,10 +97,10 @@ class Foretell<T> implements PromiseLike<T> {
       | ((reason: any) => TResult | PromiseLike<TResult>)
       | undefined
       | null
-  ): PromiseLike<T | TResult> {
+  ): Foretell<T | TResult> {
     return this.then(null, onrejected);
   }
-  public finally(onfinally?: (() => any) | undefined | null): PromiseLike<T> {
+  public finally(onfinally?: (() => any) | undefined | null): Foretell<T> {
     return this.then(onfinally, onfinally);
   }
   protected $$Execute$$() {
@@ -175,17 +175,17 @@ class Foretell<T> implements PromiseLike<T> {
   }
   /* istanbul ignore next */
   public static suppressUncaughtExceptions = false;
-  public static resolve<U>(arg?: U): PromiseLike<U> {
+  public static resolve<U>(arg?: U): Foretell<U> {
     const resolved = new Foretell<U>();
     resolved.$$Settle$$(STATE.FULFILLED, arg);
     return resolved;
   }
-  public static reject<U = never>(error?: U): PromiseLike<U> {
+  public static reject<U = never>(error?: U): Foretell<U> {
     const rejected = new Foretell<U>();
     rejected.$$Settle$$(STATE.REJECTED, error);
     return rejected;
   }
-  public static all(promises: PromiseLike<any>[]): PromiseLike<any[]> {
+  public static all(promises: PromiseLike<any>[]): Foretell<any[]> {
     const all = new Foretell<any[]>();
     const reject = (e: any) => all.$$Settle$$(STATE.REJECTED, e);
     if (isArray(promises)) {
@@ -214,7 +214,7 @@ class Foretell<T> implements PromiseLike<T> {
     }
     return all;
   }
-  public static race(promises: PromiseLike<any>[]): PromiseLike<any> {
+  public static race(promises: PromiseLike<any>[]): Foretell<any> {
     return new Foretell(
       (resolve: (arg?: any) => void, reject: (reason?: any) => void) => {
         if (isArray(promises)) {

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",
+    "baseUrl": "./",
     "incremental": true,
     "tsBuildInfoFile": "./.cache/tsBuildInfo",
     "declaration": true,
@@ -11,9 +11,10 @@
     "esModuleInterop": true,
     "module":"esnext",
     "moduleResolution": "node",
-    "rootDir": "./src"
+    "rootDir": "./"
   },
   "include": [
-    "./src/**/*"
+    "./src/**/*",
+    "./tests/**/*"
   ]
 }

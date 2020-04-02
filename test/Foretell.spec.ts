@@ -1,5 +1,5 @@
-const assert = require("assert");
-const Foretell = require("./generated/foretell");
+import assert from "assert";
+import Foretell from "../src/promise";
 
 describe("Foretell methods", () => {
   describe("constructor", () => {
@@ -8,12 +8,12 @@ describe("Foretell methods", () => {
         throw new Error("fail");
       }).then(
         () => assert.fail("Unexpected success"),
-        (error) =>
+        (error: Error) =>
           assert.equal(error.message, "fail", "Error message didn't match")
       ));
     it("errors when given a non-function parameter", () => {
       try {
-        new Foretell(1);
+        new Foretell(1 as any);
         assert.fail("Unexpected success");
       } catch (error) {
         assert.equal(
@@ -34,19 +34,19 @@ describe("Foretell methods", () => {
   });
   describe(".catch()", () => {
     it("catches rejected promises", () =>
-      Foretell.reject("Rejected").catch((msg) =>
+      Foretell.reject("Rejected").catch((msg: string) =>
         assert.equal(msg, "Rejected", "Reject message is not the same")
       ));
     it("returns a new promise after catching an error", () =>
       Foretell.reject(new Error("bad"))
-        .catch((error) => {
+        .catch((error: Error) => {
           if (error.message === "bad") {
             return { msg: "handled" };
           } else {
             assert.fail("Didn't receive error");
           }
         })
-        .then((result) =>
+        .then((result: any) =>
           assert.equal(
             result.msg,
             "handled",
@@ -58,7 +58,7 @@ describe("Foretell methods", () => {
         .catch()
         .then(
           () => assert.fail("Unexpected success"),
-          (error) =>
+          (error: Error) =>
             assert.equal(
               error.message,
               "bad",
@@ -70,7 +70,7 @@ describe("Foretell methods", () => {
         .catch(undefined)
         .then(
           () => assert.fail("Unexpected success"),
-          (error) =>
+          (error: Error) =>
             assert.equal(
               error.message,
               "bad",
@@ -82,7 +82,7 @@ describe("Foretell methods", () => {
         .catch(null)
         .then(
           () => assert.fail("Unexpected success"),
-          (error) =>
+          (error: Error) =>
             assert.equal(
               error.message,
               "bad",
@@ -91,10 +91,10 @@ describe("Foretell methods", () => {
         ));
     it("automatically rejects if returning a rejected Promise", () =>
       Foretell.reject(new Error("bad"))
-        .catch((error) => Promise.reject(error))
+        .catch((error: Error) => Promise.reject(error))
         .then(
           () => assert.fail("Unexpected success"),
-          (error) =>
+          (error: Error) =>
             assert.equal(
               error.message,
               "bad",
@@ -105,13 +105,13 @@ describe("Foretell methods", () => {
   describe(".finally()", () => {
     it("always runs even when the Promise is resolved", () =>
       Foretell.resolve("good")
-        .then((msg) => msg + " stuff")
+        .then((msg: string) => msg + " stuff")
         .finally(() =>
           assert.ok("Finally ran successfully after resolved Promise")
         ));
     it("always runs even when the Promise is rejected", () =>
       Foretell.resolve("bad")
-        .then((msg) => {
+        .then((msg: string) => {
           return Foretell.reject(msg);
         })
         .finally(() =>
@@ -133,7 +133,7 @@ describe("Foretell methods", () => {
       );
     });
     it("resolves non promise values in the array", () => {
-      const toResolve = [
+      const toResolve: any[] = [
         new Foretell((resolve) => setTimeout(resolve, 0, "promise value")),
         "non promise value",
       ];
@@ -146,7 +146,7 @@ describe("Foretell methods", () => {
       );
     });
     it("resolves immediately when all values in array are not promises", () => {
-      const toResolve = ["non promise value 1", "non promise value 2"];
+      const toResolve: any[] = ["non promise value 1", "non promise value 2"];
       return Foretell.all(toResolve).then((results) =>
         assert.deepStrictEqual(
           results,
@@ -162,7 +162,7 @@ describe("Foretell methods", () => {
       ];
       return Foretell.all(toResolve).then(
         () => assert.fail("Unexpected success"),
-        (error) =>
+        (error: Error) =>
           assert.equal(
             error.message,
             "bad stuff",
@@ -175,9 +175,9 @@ describe("Foretell methods", () => {
         assert.deepStrictEqual(results, [], "Result is not an empty array")
       ));
     it("immediately rejects when not given an array", () =>
-      Foretell.all(9).then(
+      Foretell.all(9 as any).then(
         () => assert.fail("Unexpected success"),
-        (error) =>
+        (error: Error) =>
           assert.equal(
             error.message,
             "Can't convert 9 to an array",
@@ -197,7 +197,7 @@ describe("Foretell methods", () => {
       );
     });
     it("returns the first non-promise value immediately it encounters in the array", () => {
-      const toResolve = [
+      const toResolve: any[] = [
         new Foretell((resolve) => setTimeout(resolve, 5, "one")),
         "two",
         Foretell.reject("three"),
@@ -227,9 +227,9 @@ describe("Foretell methods", () => {
       );
     });
     it("rejects if not given an array as input", () =>
-      Foretell.race(9).then(
+      Foretell.race(9 as any).then(
         () => assert.fail("Unexpected success"),
-        (error) =>
+        (error: Error) =>
           assert.equal(
             error.message,
             "Can't convert 9 to an array",

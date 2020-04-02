@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "strict": true,
+    "alwaysStrict": false,
+    "noImplicitUseStrict": true,
+    "target": "esnext",
+    "downlevelIteration": false
+  },
+  "include": ["../src/**/*.ts", "./**/*.ts"]
+}

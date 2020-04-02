@@ -4,7 +4,9 @@ color: true
 growl: false
 reporter: dot
 recursive: false
+extensions:
+  - 'ts'
 require:
-  - 'source-map-support/register'
-spec: test/**/*.spec.js
+  - 'ts-node/register'
+spec: test/**/*.spec.ts
 slow: 500
