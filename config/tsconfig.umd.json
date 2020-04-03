@@ -3,6 +3,9 @@
   "compilerOptions": {
     "target": "es5",
     "declaration": false,
-    "declarationMap": false
-  }
+    "declarationMap": false,
+    "allowJs": true,
+    "checkJs": false
+  },
+  "include": ["../src/**/*.ts", "../src/**/*.js"]
 }

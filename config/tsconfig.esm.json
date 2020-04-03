@@ -2,5 +2,7 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "target": "es2018",
-  }
+    "removeComments": true
+  },
+  "include": ["../src/**/*.ts"]
 }

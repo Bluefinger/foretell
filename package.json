@@ -4,7 +4,7 @@
   "description": "A small, fast Promise/A+ implementation written in Typescript",
   "main": "dist/umd/foretell.min.js",
   "module": "dist/esm/foretell.min.js",
-  "types": "dist/esm/promise.d.ts",
+  "types": "dist/esm/foretell.min.d.ts",
   "files": [
     "dist/**/*"
   ],
@@ -30,6 +30,7 @@
     "@typescript-eslint/eslint-plugin": "^2.26.0",
     "@typescript-eslint/parser": "^2.26.0",
     "@typescript-eslint/typescript-estree": "^2.26.0",
+    "@wessberg/rollup-plugin-ts": "^1.2.23",
     "cross-env": "^7.0.2",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.1",
@@ -41,7 +42,6 @@
     "rimraf": "^3.0.2",
     "rollup": "^2.3.2",
     "rollup-plugin-terser": "^5.3.0",
-    "rollup-plugin-typescript2": "^0.27.0",
     "sinon": "^9.0.1",
     "ts-node": "^8.8.1",
     "tslib": "^1.11.1",
