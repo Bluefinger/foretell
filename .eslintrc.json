@@ -22,5 +22,16 @@
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-this-alias": "off"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["./gulpfile.js"],
+      "env": {
+        "node": true
+      },
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off"
+      }
+    }
+  ]
 }

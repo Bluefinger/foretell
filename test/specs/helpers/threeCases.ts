@@ -4,9 +4,9 @@ import { resolved, rejected, deferred } from "./adapter";
 import type Foretell from "src/promise";
 
 export const testFulfilled = (
-  value: any,
+  value: unknown,
   test: (promise: Foretell<any>, done: Mocha.Done) => void
-) => {
+): void => {
   specify("already-fulfilled", (done) => {
     test(resolved(value), done);
   });
@@ -27,9 +27,9 @@ export const testFulfilled = (
 };
 
 export const testRejected = (
-  reason: any,
+  reason: unknown,
   test: (promise: Foretell<any>, done: Mocha.Done) => void
-) => {
+): void => {
   specify("already-rejected", (done) => {
     test(rejected(reason), done);
   });

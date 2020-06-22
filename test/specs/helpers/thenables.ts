@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 "use strict";
 
 import { resolved as resolve, rejected as reject, deferred } from "./adapter";

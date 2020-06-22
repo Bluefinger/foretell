@@ -1,5 +1,8 @@
 import { UNDEF } from "./constants";
 
 export const logError =
-  typeof console !== UNDEF ? console.error : ((() => {}) as Function);
-export const extractErrorMsg = (e: any) => `${e && e.stack ? e.stack : e}`;
+  typeof console !== UNDEF
+    ? console.error
+    : ((() => {}) as (...args: unknown[]) => void);
+export const extractErrorMsg = (e: unknown): string =>
+  `${e && (e as Error).stack ? (e as Error).stack : e}`;

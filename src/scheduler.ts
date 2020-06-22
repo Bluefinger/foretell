@@ -1,6 +1,6 @@
 import { UNDEF } from "./constants";
 
-export const scheduler = (flush: () => void) => {
+export const scheduler = (flush: () => void): (() => void) => {
   // Modern Micro-task scheduling for browsers
   if (typeof queueMicrotask !== UNDEF) {
     return () => queueMicrotask(flush);

@@ -39,8 +39,8 @@ class Foretell<T> implements PromiseLike<T> {
   private _value?: T;
   private _handled?: boolean;
   private _parent?: Foretell<any>;
-  private _onFulfill?: Function;
-  private _onReject?: Function;
+  private _onFulfill?: (arg?: any) => any;
+  private _onReject?: (arg?: any) => any;
   public constructor(
     func?: (resolve: (arg?: T) => void, reject: (reason: any) => void) => void
   ) {
@@ -103,7 +103,7 @@ class Foretell<T> implements PromiseLike<T> {
   public finally(onfinally?: (() => any) | undefined | null): Foretell<T> {
     return this.then(onfinally, onfinally);
   }
-  protected $$Execute$$() {
+  protected $$Execute$$(): void {
     const then = this;
     try {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -116,11 +116,14 @@ class Foretell<T> implements PromiseLike<T> {
       then.$$Settle$$(STATE.REJECTED, error);
     }
   }
-  protected $$Settle$$(state: STATE.FULFILLED | STATE.REJECTED, value: any) {
+  protected $$Settle$$(
+    state: STATE.FULFILLED | STATE.REJECTED,
+    value: unknown
+  ): void {
     const me = this;
     if (!me._state) {
       me._state = state;
-      me._value = value;
+      me._value = value as T;
       const clients = me._clients;
       /* istanbul ignore else */
       if (clients) {
@@ -135,7 +138,7 @@ class Foretell<T> implements PromiseLike<T> {
       }
     }
   }
-  protected $$Resolve$$(value: any) {
+  protected $$Resolve$$(value: unknown): void {
     const me = this;
     if (me === value) {
       me.$$Settle$$(
