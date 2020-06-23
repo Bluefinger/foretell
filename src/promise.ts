@@ -14,22 +14,47 @@ const { isArray } = Array;
 let pointer = 0;
 let queue: any[] = [];
 
+// To minimise allocations to the queue, both array and non-array
+// values are allowed to be added to the queue. This means that
+// client arrays can be directly accessed and iterated on instead of
+// each client promise being added individually. This results in less
+// churn with the queue and thus more performance.
+const executeTasks = (tasks: any | any[]): void => {
+  // Accessing the protected method here is 'allowed' as this is
+  // internal code only. Outside of this scope, this and the method
+  // name will be mangled anyway for saving space and obfuscation.
+  if (isArray(tasks)) {
+    for (let i = 0; i < tasks.length; i += 1) tasks[i].$$Execute$$();
+  } else {
+    tasks.$$Execute$$();
+  }
+};
+
 const flushQueue = () => {
-  let old;
+  // Loops until the result of length vs pointer equals 0, a
+  // falsey value. Then the while loop terminates.
   while (queue.length - pointer) {
-    queue[pointer].$$Execute$$();
-    queue[pointer++] = undefined;
-    if (pointer === QUEUE_SIZE) {
-      old = queue;
-      queue = old.slice(QUEUE_SIZE);
-      old.length = pointer = 0;
+    // executeTasks returns void, so acts as a quick setting of `undefined`
+    // without needing to do it explicitly, shaving off a few bytes.
+    queue[pointer] = executeTasks(queue[pointer]);
+    // Pre-increment pointer value before comparison here, allows for
+    // smaller build code while still advancing the loop.
+    if (++pointer === QUEUE_SIZE) {
+      // Slice new state of queue instead of splice to create one single new array
+      // with the correct 'view' of queued tasks.
+      // This is instead of creating a new array AND mutating the original as
+      // with splice. Results in faster ops for shrinking the queue.
+      // slice() also requires less arguments and is shorter, so more shaved bytes
+      queue = queue.slice(QUEUE_SIZE);
+      // Pointer reset to zero to point to start of new queue state.
+      pointer = 0;
     }
   }
 };
 
 const schedule = scheduler(flushQueue);
 
-const defer = (then: Foretell<any>) => {
+const defer = (then: Foretell<any> | Foretell<any>[]) => {
   if (queue.push(then) - pointer === 1) schedule();
 };
 
@@ -49,6 +74,9 @@ class Foretell<T> implements PromiseLike<T> {
     me._handled = !hasFunc;
     if (hasFunc) {
       try {
+        // hasFunc makes it clear we have a function present, but TS cannot
+        // infer here that it is not null/undefined. So we have to assert
+        // that it is indeed okay to call it.
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         func!(
           (arg?: T) => me.$$Settle$$(STATE.FULFILLED, arg),
@@ -106,12 +134,17 @@ class Foretell<T> implements PromiseLike<T> {
   protected $$Execute$$(): void {
     const then = this;
     try {
+      // $$Execute$$ only is invoked for client promises.
+      // So we know there'll be a parent here, so we manually
+      // assert it is the case.
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const parent = then._parent!;
       const nextValue =
         parent._state === STATE.FULFILLED ? then._onFulfill : then._onReject;
+      // Client promises have onFulfill and onReject functions, so we can
+      // assert that there'll always be a function to call.
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      then.$$Resolve$$(nextValue!.call(undefined, parent._value));
+      then.$$Resolve$$(nextValue!(parent._value));
     } catch (error) {
       then.$$Settle$$(STATE.REJECTED, error);
     }
@@ -127,7 +160,9 @@ class Foretell<T> implements PromiseLike<T> {
       const clients = me._clients;
       /* istanbul ignore else */
       if (clients) {
-        for (let i = 0; i < clients.length; i += 1) defer(clients[i]);
+        // Simply defer the entire clients queue instead of
+        // adding each client promise individually
+        defer(clients);
       } else if (
         state === STATE.REJECTED &&
         !Foretell.suppressUncaughtExceptions &&
